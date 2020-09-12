@@ -33,7 +33,23 @@ bot.on('message', msg => {
 	  });
 
 
-  }  
+  } else if(msg.content === 'Partido Justicialista')  {
+	const channel = bot.channels.get("518496390427443317");
+	if (!channel) return console.error("The channel does not exist!");
+	channel.join().then(connection => {
+	  // Yay, it worked!
+	  console.log("Successfully connected.");
+	  
+	  const dispatcher = connection.playFile('misc/nuestro-movimiento-es-socialista-nacional.mp3');
+	  dispatcher.on('start', () => {
+		console.log('Reproduciendo: Socialista-nacional');
+	  });		
+
+	}).catch(e => {
+	  // Oh no, it errored! Let's log it to console :)
+	  console.error(e);
+	});
+  }
 });
 
 
