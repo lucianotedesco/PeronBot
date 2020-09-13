@@ -1,56 +1,17 @@
-require('dotenv').config();
-const Discord = require('discord.js');
-const bot = new Discord.Client();
-const TOKEN = process.env.TOKEN;
+const config = require('dotenv').config();
+const botUtils = require ('./Model/bot.js');
+const messageHandler = require ('./Handlers/messageHandler');
+const bot = botUtils.connect();
 
-//DEV CHANNEL: 754162348784353344
-//FINISH CHANNEL: 518496390427443317
-
-bot.login(TOKEN);
-
-bot.on('ready', () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
-});
-
-bot.on('message', msg => {
-  if (msg.content === 'Viva Peron!') {
-	  //msg.reply('pong');
-  
-	  const channel = bot.channels.get("518496390427443317");
-	  if (!channel) return console.error("The channel does not exist!");
-	  channel.join().then(connection => {
-		// Yay, it worked!
-		console.log("Successfully connected.");
+bot.on('message', async (msg) => {	
+	if (msg.author.bot) 
+		return;
 		
-		const dispatcher = connection.playFile('misc/amigo-enemigo.mp3');
-		dispatcher.on('start', () => {
-		  console.log('Reproduciendo: Amigo-Enemigo');
-		});		
-
-	  }).catch(e => {
-		// Oh no, it errored! Let's log it to console :)
-		console.error(e);
-	  });
-
-
-  } else if(msg.content === 'Partido Justicialista')  {
-	const channel = bot.channels.get("518496390427443317");
-	if (!channel) return console.error("The channel does not exist!");
-	channel.join().then(connection => {
-	  // Yay, it worked!
-	  console.log("Successfully connected.");
-	  
-	  const dispatcher = connection.playFile('misc/nuestro-movimiento-es-socialista-nacional.mp3');
-	  dispatcher.on('start', () => {
-		console.log('Reproduciendo: Socialista-nacional');
-	  });		
-
-	}).catch(e => {
-	  // Oh no, it errored! Let's log it to console :)
-	  console.error(e);
-	});
-  }
+	let phrase = messageHandler.shouldAnswer(msg);
+	if (phrase){
+		let connection = await botUtils.joinMemberChannel(msg);
+		//si el bot ya esta respondiendo, no habrá conexión.
+		if (connection)		
+			messageHandler.speakAnswer(phrase.audioFile, connection);		
+	}	
 });
-
-
-
