@@ -6,7 +6,7 @@ module.exports = {
         });
 
         dispatcher.on('end', () => {
-            connection.disconnect();
+            setTimeout(connection.disconnect(),2000);
         });
     },         
 };
