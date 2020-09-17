@@ -6,7 +6,11 @@ module.exports = {
         });
 
         dispatcher.on('end', () => {
-            connection.disconnect();
+            setTimeout(disconectFromVoiceChannel, 2000, connection)            
         });
+
+        function disconectFromVoiceChannel(connection){
+            connection.disconnect();
+        }
     },         
 };
