@@ -133,7 +133,8 @@ module.exports = {
             if (winner != ""){
                 ballMessage.channel.send(winner.split(",") + ", mi querida plaza se viste de victoria!");
                 messageHandler.speakAnswer('./misc/extraordinario.mp3', connection);
-            }             
+            }   
+            connection.disconnect();         
         }
 
         async function drawRoulette(){
