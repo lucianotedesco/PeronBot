@@ -17,10 +17,8 @@ module.exports = {
     let cleanMessage = message.content.toLowerCase();
 
     let answer = this.dictionary.find(o => o.phrase == cleanMessage)
-    if (!answer){
-      console.log("No encuentro: " + cleanMessage);
-      return null;
-    }    
+    if (!answer)
+      return null;    
 
     if(answer.doSomething){
       answer.doSomething(message);
@@ -40,14 +38,18 @@ module.exports = {
       audioFile: './misc/nuestro-movimiento-es-socialista-nacional.mp3'
     },
     {
-      phrase: 'juguemos mi general',
+      phrase: '!peron numero',
       audioFile: '',
       doSomething: function (message) { games.guessTheNumber(message) },
+    },
+    {
+      phrase: '!peron ruleta',
+      audioFile: '',
+      doSomething: function (message) { games.roulette(message) },
     }
-
   ],
 
-  speakAnswer: function(audioFile, connection){ 
-    audio.play(audioFile, connection);
+  speakAnswer: function(audioFile, connection, shouldDisconnect = true){ 
+    return audio.play(audioFile, connection, shouldDisconnect).then();
   },
 };
